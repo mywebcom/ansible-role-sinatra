@@ -1,0 +1,23 @@
+- name: install development essentials on ubuntu
+  apt: name={{ item }} state=present
+  with_items:
+    - curl
+    - git-core
+    
+- name: add web group 
+  group: name=web state=present
+  
+- name: add user for editing content
+  user: name=test comment="Richard Cai" group=web generate_ssh_key=yes ssh_key_bits=2048 ssh_key_file=.ssh/id_rsa
+  
+- name: copy id_rsa under .ssh
+  copy: src=id_rsa dest=/home/test/.ssh/id_rsa owner=test group=web mode=600
+
+- name: copy id_rsa.pub under .ssh
+  copy: src=id_rsa.pub dest=/home/test/.ssh/id_rsa.pub owner=test group=web mode=644
+  
+- name: copy known_hosts under .ssh
+  copy: src=known_hosts dest=/home/test/.ssh/known_hosts owner=test group=web mode=644
+  
+- name: ensure .ssh has right permission
+  file: path=/home/test/.ssh owner=test group=web mode=700

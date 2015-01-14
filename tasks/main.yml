@@ -1,0 +1,7 @@
+---
+# file: roles/sinatra/tasks/main.yml
+
+- include: 'common.yml'
+- include: 'ruby.yml'
+- include: 'nginx.yml'
+

@@ -1,0 +1,14 @@
+- name: install nginx
+  apt: name=nginx state=latest
+
+- name: stop nginx
+  service: name=nginx state=stopped
+
+- name: copy nginx unicorn configuration
+  template: src=nginx-unicorn.conf dest=/etc/nginx/nginx.conf
+  
+- name: add nginx to startup items
+  service: name=nginx enabled=yes
+  
+- name: start nginx service again
+  service: name=nginx state=started

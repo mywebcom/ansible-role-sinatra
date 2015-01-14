@@ -1,0 +1,19 @@
+---
+# file: roles/sinatra/defaults/main.yml
+
+#nginx
+nginxpidpath: /var/www/
+nginxlogpath: /var/www/log/
+
+#sinatra ruby app
+pathtorubyapp: /var/www/sinatra
+rubyappgithub: git@github.com:tnh/simple-sinatra-app.git
+
+#unicorn
+unicornapppath: /var/www/sinatra
+unicornsockpath: /var/www/
+unicornlog: /var/www/log/
+
+#ansible source endpoint
+ansible_resource: ansible-resource.s3-website-ap-southeast-2.amazonaws.com
+

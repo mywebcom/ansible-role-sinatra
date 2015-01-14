@@ -1,0 +1,48 @@
+- name: create web directory for hosting sinatra app
+  file: path=/var/www state=directory group=web owner=test mode=775
+
+- name: add user for nginx 
+  user: name=nginx comment="Nginx User" group=web
+
+- name: add nginx log directory
+  file: path=/var/www/log state=directory group=web owner=nginx mode=775
+
+- name: install ruby gem for travis ci
+  apt: name="rubygems" state=present
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '12.04'
+   
+- name: install ruby gem for aws
+  apt: name="rubygems-integration" state=present
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04'
+  
+- name: install unicorn on AWS
+  apt: name="unicorn" state=present  
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04'
+  
+- name: gem install unicorn
+  shell: gem install unicorn
+  
+- name: gem install bundler
+  shell: gem install bundler
+
+- name: gem install unicorn-rails
+  shell: gem install unicorn-rails
+
+- name: gem install sinatra 
+  shell: gem install sinatra --no-ri --no-rdoc
+  
+- name: add unicorn configuration file
+  template: src=unicorn.conf dest={{unicornsockpath}}unicorn.rb owner=test group=web
+  
+- name: deploy sinatra app from github
+  git: repo={{rubyappgithub}} dest={{pathtorubyapp}} accept_hostkey=true
+  sudo: yes
+  sudo_user: test
+  
+- name: start unicorn
+  shell: unicorn_rails -c {{unicornsockpath}}unicorn.rb -D
+  ignore_errors: yes
+  
+- name: print unicorn log file
+  shell: cat /var/www/log/unicorn.stderr.log
+  
