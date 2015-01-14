@@ -1,0 +1,21 @@
+# python compiled files #
+#########################
+*.pyc
+
+# OS generated files #
+######################
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# eclipse file #
+##############
+.buildpath
+.project
+.settings/*
+.pydevproject
+
+# large zip file #
+##################
+*.tar.gz
